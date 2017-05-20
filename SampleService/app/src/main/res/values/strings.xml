@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">Sample Service</string>
+
+    <string name="title_main_activity">Service-bound activity</string>
+
+    <string name="service_notification_title">Demonstration Service</string>
+    <string name="service_notification_content">The Demonstration Service is demonstrating your sevice.</string>
+    <string name="service_notification_ticker">Demonstrating Service now...</string>
+
+    <string name="toast_overlay_granted">Overlay permission was granted.</string>
+    <string name="toast_overlay_refused">Overlay permission was refused.</string>
+    <string name="toast_permissions_granted">Permissions were granted.</string>
+    <string name="toast_permissions_not_granted">Permissions not granted.</string>
+    <string name="toast_unnecessary_overlay_request">Unnecessary overlay request detected.</string>
+    <string name="toast_activity_cannot_service_unavailable">The service is not available to do this.</string>
+    <string name="toast_activity_cannot_do_something">This activity is won\'t risk doing this. There may be outstanding permissions.</string>
+    <string name="toast_service_cannot_do_something">The service won\'t risk doing this. There may be outstanding permissions.</string>
+    <string name="toast_service_started">The demonstration service has been created.</string>
+    <string name="toast_service_destroyed">The demonstration service has been destroyed.</string>
+
+    <string name="text_intro">
+        This app manages an ongoing Service that runs with a notification to help Android
+        prioritise it highly enough to keep it operational in the background.
+    </string>
+
+    <string name="btn_get_permissions">Grant permissions...</string>
+    <string name="btn_do_something">Do something!</string>
+
+    <string name="menu_about">About...</string>
+    <string name="title_about">About this app</string>
+    <string name="text_about">
+        This app demonstrates how to implement a long-running background Service,
+        and how to bind to it safely from your Activities.
+        \n\nFreely created and distributed under no licence by Front-Line Tech Ltd.
+        \n\nhttp://front-line-tech.com
+    </string>
+
+</resources>
