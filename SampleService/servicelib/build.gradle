@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 24
@@ -18,6 +19,15 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    publish {
+        groupId = 'com.github.instantiator'
+        artifactId = 'background-service-lib'
+        publishVersion = '1.0'
+        desc = 'Essential classes for persistent, long-running Services.'
+        uploadName = 'ServiceLib'
+        licences = [ 'Public domain' ]
+        website = 'https://github.com/instantiator/background-service-lib'
     }
 }
 
