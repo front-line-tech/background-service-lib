@@ -173,3 +173,4 @@ Your receiver will also need an entry in the manifest file, with an intent filte
 ### Credits
 
 * See: https://stfalcon.com/en/blog/post/create-and-publish-your-Android-library for a comprehensive guide to publishing Android libraries to jCenter.
+* See also: https://medium.com/@daniellevass/how-to-publish-your-android-studio-library-to-jcenter-5384172c4739
