@@ -3,11 +3,31 @@ Essential classes for reliable background Services.
 
 ## What is servicelib?
 
-Servicelib provide you with a number of classes to support you in quickly and easily build a Service into your app that runs persistently in the background. Android can destroy any Service or Activity at any time to relieve memory constraints - but this Service will hint strongly that the user has an interest in it running uninterrupted, and requests to Android that it restart as soon as memory becomes available again. The Service will run if any activities are bound to it or not, and will start on boot.
+Servicelib provide you with a number of classes to support you to quickly build a Service into your app that runs persistently in the background.
 
-Servicelib also provides you with an abstract Activity class that automatically binds to the Service whenever it is in use, and unbinds when it is not. This gives you access to the Service as if it were just another POJO. This Activity is also able to request permissions for your app, and provides helper methods to determine if all the required permissions are granted.
+Android can destroy any Service or Activity at any time to relieve memory constraints - but this Service will hint strongly that the user has an interest in it running uninterrupted. If the Service is halted due to memory constraints, or any other reason, it will restart as soon as conditions become favourable again. The Service will run if any activities are bound to it or not, and will start on boot.
 
-Nothing is going to make Android app Services simple or easy - but this library will help you cut out a lot of the routine boilerplate code.
+Servicelib also provides you with an abstract Activity class that automatically binds to the Service whenever it is in use, and unbinds when it is not. This gives you access to the Service from your Activity as if it were just another POJO.
+
+Your Activities are also able to request permissions for your app, and helper methods can help you to determine if all the required permissions are granted.
+
+_Nothing is going to make Android app Services simple or easy - but this library will help you cut out a lot of the routine boilerplate code._
+
+## Installation
+
+To import this project using gradle, add the following to your dependencies:
+
+    compile 'com.github.instantiator:background-service-lib:1.0'
+
+Also, ensure that there's an entry for `jcenter()` listed somewhere, eg. in the root `build.gradle` for your Project:
+
+    allprojects {
+        repositories {
+            jcenter()
+        }
+    }
+
+You are welcome to clone and fork this repository to your heart's content.
 
 ## How do I use it?
 
@@ -174,3 +194,7 @@ Your receiver will also need an entry in the manifest file, with an intent filte
 
 * See: https://stfalcon.com/en/blog/post/create-and-publish-your-Android-library for a comprehensive guide to publishing Android libraries to jCenter.
 * See also: https://medium.com/@daniellevass/how-to-publish-your-android-studio-library-to-jcenter-5384172c4739
+
+## Licensing
+
+Do as you please - commercially or otherwise, but if you significantly improve this project, I'd invite you to let me know what you did through a comment or a pull request. Thanks!
