@@ -23,7 +23,7 @@ android {
     publish {
         groupId = 'com.github.instantiator'
         artifactId = 'background-service-lib'
-        publishVersion = '1.0'
+        publishVersion = '1.1'
         desc = 'Essential classes for persistent, long-running Services.'
         uploadName = 'ServiceLib'
         licences = [ 'Public domain' ]
