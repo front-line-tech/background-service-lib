@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
@@ -11,35 +12,44 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.widget.Toast;
 
-public abstract class AbstractBackgroundService<ServiceInterface> extends Service {
+public abstract class AbstractBackgroundService extends Service {
 
   private static final String TAG = "AbstractBackgroundService";
 
-  IServiceBinder<ServiceInterface> binder;
+  IBinder binder;
   Notification foreground_notification;
   BackgroundServiceConfig config;
-  final int FOREGROUND_ID = 8001;
+
+  private static int NEXT_FOREGROUND_ID = 8000; // shared counter to prevent clashes between instances
+  private int foreground_id; // the id of this instance's notification
 
   @Override
   public void onCreate() {
     super.onCreate();
-    binder = createBinder((ServiceInterface)this);
+    foreground_id = NEXT_FOREGROUND_ID++;
+    binder = createBinder();
     config = configure(new BackgroundServiceConfig());
+    SharedPreferences prefs = getSharedPreferences(getClass().getCanonicalName(), MODE_PRIVATE);
+    restoreFrom(prefs);
     if (config.show_notification) { goToForeground(); }
   }
 
   @Override
   public void onDestroy() {
     super.onDestroy();
+    SharedPreferences.Editor editor = getSharedPreferences(getClass().getCanonicalName(), MODE_PRIVATE).edit();
+    storeTo(editor);
+    editor.commit();
     if (foreground_notification != null) { quitForeground(); }
   }
 
+  protected abstract void restoreFrom(SharedPreferences prefs);
+  protected abstract void storeTo(SharedPreferences.Editor editor);
+
   /**
-   * Provides a Binder object to allow Activitites to bind to this service with the appropriate interface.
+   * Provides a Binder object to allow Activities to bind to this service with the appropriate interface.
    */
-  protected ServiceBinder<ServiceInterface> createBinder(ServiceInterface theService) {
-    return new ServiceBinder<ServiceInterface>(theService);
-  }
+  protected abstract IBinder createBinder();
 
   @Override
   public IBinder onBind(Intent intent) { return binder; }
@@ -51,7 +61,7 @@ public abstract class AbstractBackgroundService<ServiceInterface> extends Servic
 
   private void goToForeground() {
     foreground_notification = buildStandardNotification();
-    startForeground(FOREGROUND_ID, foreground_notification);
+    startForeground(foreground_id, foreground_notification);
   }
 
   /**
@@ -137,3 +147,4 @@ public abstract class AbstractBackgroundService<ServiceInterface> extends Servic
   }
 
 }
+

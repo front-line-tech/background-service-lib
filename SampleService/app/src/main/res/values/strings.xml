@@ -3,9 +3,13 @@
 
     <string name="title_main_activity">Service-bound activity</string>
 
-    <string name="service_notification_title">Demonstration Service</string>
-    <string name="service_notification_content">The Demonstration Service is demonstrating your sevice.</string>
-    <string name="service_notification_ticker">Demonstrating Service now...</string>
+    <string name="binding_service_notification_title">Demonstration Binding Service</string>
+    <string name="binding_service_notification_content">The Demonstration Binding Service is demonstrating your sevice.</string>
+    <string name="binding_service_notification_ticker">Demonstrating Binding Service now...</string>
+
+    <string name="messaging_service_notification_title">Demonstration Messaging Service</string>
+    <string name="messaging_service_notification_content">The Demonstration Messaging Service is demonstrating your sevice.</string>
+    <string name="messaging_service_notification_ticker">Demonstrating Messaging Service now...</string>
 
     <string name="toast_overlay_granted">Overlay permission was granted.</string>
     <string name="toast_overlay_refused">Overlay permission was refused.</string>
@@ -15,16 +19,27 @@
     <string name="toast_activity_cannot_service_unavailable">The service is not available to do this.</string>
     <string name="toast_activity_cannot_do_something">This activity is won\'t risk doing this. There may be outstanding permissions.</string>
     <string name="toast_service_cannot_do_something">The service won\'t risk doing this. There may be outstanding permissions.</string>
-    <string name="toast_service_started">The demonstration service has been created.</string>
-    <string name="toast_service_destroyed">The demonstration service has been destroyed.</string>
+
+    <string name="toast_message_received">Message received: %d</string>
+
+    <string name="toast_binding_service_started">The binding demonstration service has been created.</string>
+    <string name="toast_binding_service_destroyed">The binding demonstration service has been destroyed.</string>
+
+    <string name="toast_messaging_service_started">The messaging demonstration service has been created.</string>
+    <string name="toast_messaging_service_destroyed">The messaging demonstration service has been destroyed.</string>
 
     <string name="text_intro">
         This app manages an ongoing Service that runs with a notification to help Android
         prioritise it highly enough to keep it operational in the background.
+        \n\nThere are two background services running: the DemonstrationBindingService (to which this
+        Activity is bound), and the DemonstrationMessagingService which can receive inter-process
+        messages from other apps (although in this case you will be sending messages from the same
+        process).
     </string>
 
     <string name="btn_get_permissions">Grant permissions...</string>
     <string name="btn_do_something">Do something!</string>
+    <string name="btn_send_message">Send a message!</string>
 
     <string name="menu_about">About...</string>
     <string name="title_about">About this app</string>

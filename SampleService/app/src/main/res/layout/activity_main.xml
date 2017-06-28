@@ -33,4 +33,11 @@
         android:layout_height="wrap_content"
         android:text="@string/btn_do_something" />
 
+    <Button
+        android:id="@+id/btn_send_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_send_message" />
+
+
 </LinearLayout>

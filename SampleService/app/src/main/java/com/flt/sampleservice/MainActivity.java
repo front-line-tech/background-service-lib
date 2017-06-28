@@ -2,19 +2,35 @@ package com.flt.sampleservice;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 import com.flt.servicelib.AbstractServiceBoundAppCompatActivity;
+import com.flt.servicelib.MessagingServiceConnection;
 
-public class MainActivity extends AbstractServiceBoundAppCompatActivity<DemonstrationService, DemonstrationServiceInterface> {
+public class MainActivity extends AbstractServiceBoundAppCompatActivity<DemonstrationBindingService, DemonstrationServiceInterface> {
+  private static final String TAG = "MainActivity";
+
+  MessagingServiceConnection messaging_service_connection;
 
   Button btn_get_permissions;
   Button btn_do_something;
+  Button btn_send_message;
+
+  int next_message = 777;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +39,7 @@ public class MainActivity extends AbstractServiceBoundAppCompatActivity<Demonstr
 
     btn_get_permissions = (Button)findViewById(R.id.btn_get_permissions);
     btn_do_something = (Button)findViewById(R.id.btn_do_something);
+    btn_send_message = (Button)findViewById(R.id.btn_send_message);
 
     btn_get_permissions.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -38,7 +55,19 @@ public class MainActivity extends AbstractServiceBoundAppCompatActivity<Demonstr
       }
     });
 
+    btn_send_message.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        attemptToSendMessage();
+      }
+    });
+
     setTitleBarToVersionWith(getString(R.string.title_main_activity));
+
+    messaging_service_connection = new MessagingServiceConnection();
+    Intent intent = new Intent(this, DemonstrationMessagingService.class);
+    bindService(intent, messaging_service_connection, Context.BIND_AUTO_CREATE);
+
   }
 
   private void attemptToDoSomething() {
@@ -55,9 +84,20 @@ public class MainActivity extends AbstractServiceBoundAppCompatActivity<Demonstr
     }
   }
 
+  private void attemptToSendMessage() {
+    Bundle bundle = new Bundle();
+
+    try {
+      messaging_service_connection.send(next_message++, bundle);
+    } catch (Exception e) {
+      informUser("Unable to send message: " + e.getMessage());
+      Log.e(TAG, "Unable to send message.", e);
+    }
+  }
+
   @Override
   protected Class getServiceClass() {
-    return DemonstrationService.class;
+    return DemonstrationBindingService.class;
   }
 
   @Override
@@ -136,4 +176,6 @@ public class MainActivity extends AbstractServiceBoundAppCompatActivity<Demonstr
         })
         .show();
   }
+
+
 }

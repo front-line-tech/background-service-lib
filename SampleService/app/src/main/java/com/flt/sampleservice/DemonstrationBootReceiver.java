@@ -2,11 +2,11 @@ package com.flt.sampleservice;
 
 import com.flt.servicelib.AbstractBootReceiver;
 
-public class DemonstrationBootReceiver extends AbstractBootReceiver<DemonstrationService> {
+public class DemonstrationBootReceiver extends AbstractBootReceiver<DemonstrationBindingService> {
 
   @Override
-  protected Class<DemonstrationService> getServiceClass() {
-    return DemonstrationService.class;
+  protected Class<DemonstrationBindingService> getServiceClass() {
+    return DemonstrationBindingService.class;
   }
 
 }
