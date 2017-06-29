@@ -3,6 +3,10 @@ Essential classes for reliable background Services.
 
 ## Change log
 
+### Version 1.2
+
+* Add visbility of bound status for MessengerServiceConnection.
+
 ### Version 1.1
 
 * Add support for storing and restoring from SharedPreferences.
