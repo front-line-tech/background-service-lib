@@ -36,7 +36,9 @@ public class MessagingServiceConnection implements ServiceConnection {
   public void onServiceConnected(ComponentName name, IBinder service) {
     bound = true;
     messenger = new Messenger(service);
-    listener.onConnected(this);
+    if (listener != null) {
+      listener.onConnected(this);
+    }
   }
 
   @Override
@@ -44,7 +46,9 @@ public class MessagingServiceConnection implements ServiceConnection {
     // unbind or process might have crashes
     messenger = null;
     bound = false;
-    listener.onDisconnected(this);
+    if (listener != null) {
+      listener.onDisconnected(this);
+    }
   }
 
   public interface Listener {
