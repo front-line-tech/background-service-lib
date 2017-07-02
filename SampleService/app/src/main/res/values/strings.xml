@@ -2,6 +2,7 @@
     <string name="app_name">Sample Service</string>
 
     <string name="title_main_activity">Service-bound activity</string>
+    <string name="title_messenger_activity">Messenger activity</string>
 
     <string name="binding_service_notification_title">Demonstration Binding Service</string>
     <string name="binding_service_notification_content">The Demonstration Binding Service is demonstrating your sevice.</string>
@@ -40,6 +41,7 @@
     <string name="btn_get_permissions">Grant permissions...</string>
     <string name="btn_do_something">Do something!</string>
     <string name="btn_send_message">Send a message!</string>
+    <string name="btn_pure_messenger_activity">Show messenger activity...</string>
 
     <string name="menu_about">About...</string>
     <string name="title_about">About this app</string>

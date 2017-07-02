@@ -9,8 +9,6 @@ import android.util.Log;
 import com.flt.servicelib.AbstractBackgroundMessengerService;
 import com.flt.servicelib.BackgroundServiceConfig;
 
-import java.util.Date;
-
 public class DemonstrationMessagingService extends AbstractBackgroundMessengerService {
 
   @Override
@@ -45,7 +43,7 @@ public class DemonstrationMessagingService extends AbstractBackgroundMessengerSe
         getString(R.string.messaging_service_notification_content),
         getString(R.string.messaging_service_notification_ticker),
         R.mipmap.ic_service_messaging,
-        MainActivity.class);
+        ServiceAndMessengerActivity.class);
 
     return config;
   }

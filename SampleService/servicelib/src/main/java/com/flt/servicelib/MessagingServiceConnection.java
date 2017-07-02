@@ -7,6 +7,11 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 
+/**
+ * A class for establishing a 1-way link with a service running in another process. This link uses
+ * a Messenger object to transmit message bundles. To observe change in state, implement and set the
+ * MessagingServiceConnection.Listener.
+ */
 public class MessagingServiceConnection implements ServiceConnection {
   private boolean bound;
   private Messenger messenger;
@@ -33,9 +38,9 @@ public class MessagingServiceConnection implements ServiceConnection {
   }
 
   @Override
-  public void onServiceConnected(ComponentName name, IBinder service) {
+  public void onServiceConnected(ComponentName name, IBinder binder) {
     bound = true;
-    messenger = new Messenger(service);
+    this.messenger = new Messenger(binder);
     if (listener != null) {
       listener.onConnected(this);
     }

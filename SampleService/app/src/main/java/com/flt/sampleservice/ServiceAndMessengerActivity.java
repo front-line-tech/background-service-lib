@@ -21,7 +21,7 @@ import android.widget.Button;
 import com.flt.servicelib.AbstractServiceBoundAppCompatActivity;
 import com.flt.servicelib.MessagingServiceConnection;
 
-public class MainActivity extends AbstractServiceBoundAppCompatActivity<DemonstrationBindingService, DemonstrationServiceInterface> {
+public class ServiceAndMessengerActivity extends AbstractServiceBoundAppCompatActivity<DemonstrationBindingService, DemonstrationServiceInterface> {
   private static final String TAG = "MainActivity";
 
   MessagingServiceConnection messaging_service_connection;
@@ -29,6 +29,7 @@ public class MainActivity extends AbstractServiceBoundAppCompatActivity<Demonstr
   Button btn_get_permissions;
   Button btn_do_something;
   Button btn_send_message;
+  Button btn_messenger_activity;
 
   int next_message = 777;
 
@@ -40,6 +41,7 @@ public class MainActivity extends AbstractServiceBoundAppCompatActivity<Demonstr
     btn_get_permissions = (Button)findViewById(R.id.btn_get_permissions);
     btn_do_something = (Button)findViewById(R.id.btn_do_something);
     btn_send_message = (Button)findViewById(R.id.btn_send_message);
+    btn_messenger_activity = (Button)findViewById(R.id.btn_pure_messenger_activity);
 
     btn_get_permissions.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -62,12 +64,19 @@ public class MainActivity extends AbstractServiceBoundAppCompatActivity<Demonstr
       }
     });
 
+    btn_messenger_activity.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent i = new Intent(ServiceAndMessengerActivity.this, MessengerActivity.class);
+        startActivity(i);
+      }
+    });
+
     setTitleBarToVersionWith(getString(R.string.title_main_activity));
 
     messaging_service_connection = new MessagingServiceConnection();
     Intent intent = new Intent(this, DemonstrationMessagingService.class);
     bindService(intent, messaging_service_connection, Context.BIND_AUTO_CREATE);
-
   }
 
   private void attemptToDoSomething() {
@@ -96,8 +105,9 @@ public class MainActivity extends AbstractServiceBoundAppCompatActivity<Demonstr
   }
 
   @Override
-  protected Class getServiceClass() {
-    return DemonstrationBindingService.class;
+  protected void onResume() {
+    super.onResume();
+    updateUI();
   }
 
   @Override
@@ -108,11 +118,11 @@ public class MainActivity extends AbstractServiceBoundAppCompatActivity<Demonstr
   private void updateUI() {
     btn_get_permissions.setEnabled(bound && anyOutstandingPermissions());
     btn_do_something.setEnabled(bound && !anyOutstandingPermissions());
+    btn_send_message.setEnabled(bound && !anyOutstandingPermissions());
   }
 
   @Override
   protected void onGrantedOverlayPermission() {
-
     informUser(R.string.toast_overlay_granted);
     updateUI();
   }

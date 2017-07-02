@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context="com.flt.sampleservice.MainActivity">
+    tools:context="com.flt.sampleservice.ServiceAndMessengerActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -39,5 +39,10 @@
         android:layout_height="wrap_content"
         android:text="@string/btn_send_message" />
 
+    <Button
+        android:id="@+id/btn_pure_messenger_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_pure_messenger_activity" />
 
 </LinearLayout>

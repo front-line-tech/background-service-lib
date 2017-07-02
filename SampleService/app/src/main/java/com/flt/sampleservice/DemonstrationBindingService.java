@@ -49,7 +49,7 @@ public class DemonstrationBindingService extends AbstractBackgroundBindingServic
         getString(R.string.binding_service_notification_content),
         getString(R.string.binding_service_notification_ticker),
         R.mipmap.ic_service_binding,
-        MainActivity.class);
+        ServiceAndMessengerActivity.class);
 
     return config;
   }
