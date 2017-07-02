@@ -3,6 +3,9 @@ package com.flt.servicelib;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Message;
+import android.os.Messenger;
 import android.support.v7.app.AppCompatActivity;
 
 /**
@@ -56,6 +59,11 @@ public abstract class AbstractMessengerServiceBoundAppCompatActivity extends Abs
         bound = false;
         onBoundChanged(false);
       }
+
+      @Override
+      public void onMessageReceived(Message message) {
+        AbstractMessengerServiceBoundAppCompatActivity.this.onMessageReceived(message);
+      }
     });
 
     Intent intent = new Intent();
@@ -80,6 +88,8 @@ public abstract class AbstractMessengerServiceBoundAppCompatActivity extends Abs
       onBoundChanged(bound);
     }
   }
+
+  protected abstract void onMessageReceived(Message message);
 
   /**
    * Override to implement UI changes that reflect availability of the Service (ie. show/hide/enable/disable UI compoennts).

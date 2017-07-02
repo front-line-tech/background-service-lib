@@ -2,6 +2,7 @@ package com.flt.sampleservice;
 
 import android.Manifest;
 import android.content.ComponentName;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -60,6 +61,11 @@ public class MessengerActivity extends AbstractMessengerServiceBoundAppCompatAct
   @Override
   protected ComponentName createServiceComponentName() {
     return new ComponentName("com.flt.sampleservice", "com.flt.sampleservice.DemonstrationMessagingService");
+  }
+
+  @Override
+  protected void onMessageReceived(Message message) {
+    informUser(getString(R.string.toast_activity_message_received, message.what));
   }
 
   @Override

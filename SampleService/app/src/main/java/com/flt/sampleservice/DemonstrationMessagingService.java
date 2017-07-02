@@ -2,6 +2,7 @@ package com.flt.sampleservice;
 
 import android.Manifest;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -54,14 +55,18 @@ public class DemonstrationMessagingService extends AbstractBackgroundMessengerSe
   }
 
   @Override
-  protected Handler createMessageHandler() {
-    return new IncomingHandler();
-  }
+  protected void onMessageReceived(Message message) {
+    informUser(getString(R.string.toast_service_message_received, message.what));
+    Message response = Message.obtain();
+    response.what = message.what+1;
+    response.replyTo = receiver;
+    response.setData(new Bundle());
 
-  private class IncomingHandler extends Handler {
-    @Override
-    public void handleMessage(Message msg) {
-      informUser(getString(R.string.toast_message_received, msg.what));
+    try {
+      replyTo(message, response);
+    } catch (Exception e) {
+      informUser("Exception encountered replying from Service: " + e.getMessage());
     }
   }
+
 }

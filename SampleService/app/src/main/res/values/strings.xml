@@ -21,7 +21,8 @@
     <string name="toast_activity_cannot_do_something">This activity is won\'t risk doing this. There may be outstanding permissions.</string>
     <string name="toast_service_cannot_do_something">The service won\'t risk doing this. There may be outstanding permissions.</string>
 
-    <string name="toast_message_received">Message received: %d</string>
+    <string name="toast_service_message_received">Service received: %d</string>
+    <string name="toast_activity_message_received">Activity received: %d</string>
 
     <string name="toast_binding_service_started">The binding demonstration service has been created.</string>
     <string name="toast_binding_service_destroyed">The binding demonstration service has been destroyed.</string>
