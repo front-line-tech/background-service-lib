@@ -286,6 +286,8 @@ I recommend checking and not assuming you have the overlay permission it (if you
 You will also need a line in the manifest file to request this permission, which is unusually named:
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    
+NB. The permissions and window types for this may be changing in Android O. See the [Android O changes documentation](https://developer.android.com/preview/behavior-changes.html#cwt) for more information.
 
 ___If you are not using the overlay permissions, then simply implement empty instances of the related abstract methods on your Activity.___
 
