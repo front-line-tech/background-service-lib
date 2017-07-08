@@ -3,17 +3,15 @@ Essential classes for reliable background Services.
 
 ## Change log
 
-### Versions 1.3 to 1.8
+### Versions 1.2 to 1.8
 
 * Define separate service classes: "Messenger Services" and "Bound Services".
 * New Service classes: __AbstractBackgroundBindingService__, __AbstractBackgroundMessengerService__.
 * Provide abstract activites that can utilise each: __AbstractMessengerServiceBoundAppCompatActivity__, __AbstractServiceBoundAppCompatActivity__.
 * Abstract away shared components into: __AbstractBackgroundService__, __AbstractPermissionExtensionAppCompatActivity__.
+* Provide __MessengerServiceConnection__ to communicate across process boundaries from any Context.
+* Add visbility of bound status for __MessengerServiceConnection__.
 * Update sample code in documentation.
-
-### Version 1.2
-
-* Add visbility of bound status for MessengerServiceConnection.
 
 ### Version 1.1
 
