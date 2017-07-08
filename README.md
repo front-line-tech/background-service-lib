@@ -3,6 +3,14 @@ Essential classes for reliable background Services.
 
 ## Change log
 
+### Versions 1.3 to 1.8
+
+* Define separate service classes: "Messenger Services" and "Bound Services".
+* New Service classes: __AbstractBackgroundBindingService__, __AbstractBackgroundMessengerService__.
+* Provide abstract activites that can utilise each: __AbstractMessengerServiceBoundAppCompatActivity__, __AbstractServiceBoundAppCompatActivity__.
+* Abstract away shared components into: __AbstractBackgroundService__, __AbstractPermissionExtensionAppCompatActivity__.
+* Update sample code in documentation.
+
 ### Version 1.2
 
 * Add visbility of bound status for MessengerServiceConnection.
@@ -22,7 +30,13 @@ Initial release with support for persistent background Binding Services.
 
 __Servicelib__ provide you with a number of classes to support you to quickly build a Binding Service into your app that runs persistently in the background. It also provides some classes that will help you build Activities that can easily bind and communicate with your Service.
 
-Android can destroy any Service or Activity at any time to relieve memory constraints - but Services based on Servicelib will hint strongly that the user has an interest in their uninterrupted operation. If the Service is halted due to memory constraints, or any other reason, it will restart as soon as conditions become favourable again. The Service can be set up to run regardless any activities (bound to it or not), and will start on boot.
+Additionally, Servicelib also supports _interprocess-communication_ through Messenger Services, allowing you to establish a Service in one app, and communicate with it from any others.
+
+Android can destroy any Service or Activity at any time to relieve memory constraints. Servicelib helps you to cope with this in the following ways:
+
+* Services based on Servicelib can be configured to hint strongly that the user has an interest in their uninterrupted operation. _You should think hard about whether you need this feature: Services that run indefinitely consume resources that could otherwise be freed up to keep the device responsive and make room for other apps._
+* Servicelib Services can be set up to run regardless of any activities (bound to it or not), and can be easily set up to start on boot.
+* If a Service is halted due to memory constraints, or any other reason, it will restart as soon as conditions become favourable again.
 
 _Nothing is going to make Android app Services simple or easy to build and use - but this library will help you cut out a lot of the routine boilerplate code._
 
@@ -36,15 +50,15 @@ Messenger Services are able to receive inter-process communications through a Me
 
 ### How can an Activity bind to a Binding Service?
 
-Servicelib provides an abstract class called AbstractServiceBoundAppCompatActivity that automatically binds to a Service whenever it is active, and unbinds when it is not. This gives you access to the Service from your Activity as if it were just another POJO - but only when it is running in the foreground.
+Servicelib provides an abstract class called __AbstractServiceBoundAppCompatActivity__ that automatically binds to a Service whenever it is active, and unbinds when it is not. This gives you access to the Service from your Activity as if it were just another POJO - but only when the activity is running in the foreground. The Activity automatically disconnects when it is not in use (ie. when not visible to the user).
 
-Your Activities are also able to request permissions for your app, and helper methods can help you to determine if all the required permissions are granted.
+Your Activities are also able to request permissions for your app, and helper methods can help you to determine if all the required permissions are granted before taking an action.
 
 ## Installation
 
 To import this project using gradle, add the following to your dependencies:
 
-    compile 'com.github.instantiator:background-service-lib:1.1'
+    compile 'com.github.instantiator:background-service-lib:1.+'
 
 Also, ensure that there's an entry for `jcenter()` listed somewhere, eg. in the root `build.gradle` for your Project:
 
@@ -61,12 +75,12 @@ You are welcome to clone and fork this repository to your heart's content.
 In order to build a reliable Binding Service, there are a few things you must do. Servicelib provides you with the tools you'll need:
 
 * Create an interface for your Service - with all the methods you expect any bound activities to call.
-* Subclass the appropriate abstract Service class, and implement all your Service interface methods.
-* Provide the AbstractBackgroundService with a basic configuration.
+* Subclass the appropriate abstract Service class, and implement all your abstract Service methods.
+* Provide the Service with a basic configuration.
 * Subclass the AbstractBootReceiver, and register it in your manifest file to receive the BOOT_COMPLETED intent.
 * Override the default Application class, and use it to start the Service when the Application starts.
 * Set this Application class as the android:name for your Application in the manifest file.
-* Build an Activity that subclasses AbstractServiceBoundAppCompatActivity, and implement the abstract methods for the permission-related events.
+* Build an Activity that subclasses AbstractServiceBoundAppCompatActivity or AbstractMessengerServiceBoundAppCompatActivity, and implement the various abstract methods provided.
 * Ensure that the required permissions specified in getRequiredPermissions in your activities and Service are also present in the manifest file.
 * Test!
 
@@ -82,21 +96,31 @@ Subclass the __AbstractBackgroundBindingService__ and provide it with details of
 
 Subclass the __AbstractBackgroundMessengerService__ - you'll note there is no interface to implement. The Service uses a __Messenger__ for inter-process communication, and Messengers communicate by means of an integer message id, and a Bundle.
 
-You'll need to implement the __createMessageHandler__ method and provide a Handler that can interpret the Messages the Messenger may receive, eg.
+When registering the Service in your manifest file, provide a process name:
+
+    <service
+      android:name=".service.SharedService"
+      android:enabled="true"
+      android:exported="true"
+      android:process=":my_process">
+    </service>
+
+You'll need to implement the __onMessageReceived__ method in your new service to interpret the Messages the Messenger may receive, eg.
 
     @Override
-    protected Handler createMessageHandler() {
-      return new IncomingHandler();
-    }
-
-    private class IncomingHandler extends Handler {
-      @Override
-      public void handleMessage(Message msg) {
-        informUser(getString(R.string.toast_message_received, msg.what));
+    protected void onMessageReceived(Message message) {
+      switch (message.what) {
+        case SharedConstants.MESSAGE_TYPE_1:
+          Bundle data = message.getData();
+          // TODO: do something with this message and data
+          break;
+        default:
+          informUser("Received unrecognised Message.");
+          break;
       }
     }
 
-You might want to _switch_ on the msg.what - which is the message id. The Message also contains a Bundle in which you can put some other information.
+You might want to _switch_ on the msg.what - which is the message id. The Message also contains a Bundle in which you can put some other data. (NB. Bundles can contain Parcels. I have found the [Parceler library](https://github.com/johncarl81/parceler) extremely useful here for bundling up more complex objects and getting them transferred across process boundaries. Don't forget to provide the appropriate ClassLoader to your Parceler at the other end!)
 
 See below for more information on how to communicate with your Service.
 
@@ -113,17 +137,44 @@ The other methods you should provide are those from the Service's interface - wh
 
 ### How do I communicate with my Messenger Service?
 
-You'll need to bind an instance of a __MessengerServiceConnection__ to it - and you can do that with an Android intent. In this example, we are communicating from an Activity, so __this__ is a Context:
+The easiest way is to subclass the __AbstractMessengerServiceBoundAppCompatActivity__. Then, simply override the __createServiceComponentName()__ method to indicate which Service you are trying to connect to. (NB. We use a ComponentName to indicate the service to help apps that do not share classes with your Service to connect without referencing your Service.class.)
+
+_In theory you can connect to any service that implements a Messenger-based ServiceConnection in place of its Binder. I'd recommend using a service that extends __AbstractBackgroundMessengerService__ as this is a little simpler to use, and provides support for 2-way communication.
+
+To communicate with the Service, use the __connection.send(int messageId, Bundle data)__ method. The __connection__ object also provides you with a method to check the state of the connection: __isBound()__.
+
+To receive responses, this abstract Activity class provides a method to implement: __onMessageReceived(Message message)__ which provides you with any new messages received from the Service it is connected to - provide 2-way communication. The Service can choose to reply to any message you send to it through the connection object - as the connection object also maintains a Messenger to be used to receive messages, and posts this in each Message.replyTo field.
+
+#### And how do I communicate with my Messenger Service from any other context?
+
+Alternatively, you'll need to bind an instance of a __MessengerServiceConnection__ to it - and you can do that with an Android intent. In the following example example, we are communicating from an ordinary Activity, so __this__ is a Context:
 
     messaging_service_connection = new MessagingServiceConnection();
     Intent intent = new Intent(this, DemonstrationMessagingService.class);
     bindService(intent, messaging_service_connection, Context.BIND_AUTO_CREATE);
     
-Once done, you can communicate with it through this MessagingServiceConnection:
+To do it with a __ComponentName__ instead of the Service.class:
 
-    int messageId = SOME_CONSTANT;
+    messaging_service_connection = new MessagingServiceConnection();
+    Intent intent = new Intent();
+    intent.setComponent(new ComponentName("com.flt.sampleservice", "com.flt.sampleservice.DemonstrationMessagingService"));
+    bindService(intent, messaging_service_connection, Context.BIND_AUTO_CREATE);
+    
+Once done, you can communicate with it through a __MessagingServiceConnection__:
+
+    int messageType = SOME_CONSTANT;
     Bundle bundle = new Bundle(); // you can put primitives and Parcelables into Bundles
-    messaging_service_connection.send(messageId, bundle);
+    messaging_service_connection.send(messageType, bundle);
+
+The __MessagingServiceConnection__ allows you to create and set a __Listener__ object to help monitor the connection:
+
+    public interface Listener {
+      void onConnected(MessagingServiceConnection source);
+      void onDisconnected(MessagingServiceConnection source);
+      void onMessageReceived(Message message);
+    }
+
+As you can see, this also allows you to receive responses from the Service through the __onMessageReceived__ method. As mentioned above, the __MessagingServiceConnection__ maintains a Messenger object to receive replies, and inserts it into each Message.replyTo field that it sends.
 
 ### Why do I need to store and restore from SharedPreferences?
 
@@ -174,7 +225,7 @@ We override the Application class as it is the perfect place to ensure that the 
 
 ### Tell me some more about AbstractServiceBoundAppCompatActivity
 
-The AbstractServiceBoundAppCompatActivity class attempts to bind to your __Binding Service__ as soon as it is in use, and unbinds whenever it is not.
+The AbstractServiceBoundAppCompatActivity class attempts to bind to your __Binding Service__ as soon as it is in use, and unbinds whenever it is not. It then provides access to your service in the __service__ field.
 
 The Activity also provides a number of methods and member variables of note:
 
@@ -228,13 +279,17 @@ Make sure that your manifest file contains the same permissions as __uses-permis
 
 ### What about those overlay permission methods?
 
-The overlay permission is special, different, and contentious! (Not least because the ability to draw over any other apps carries with it significant risk of abuse.) Right now it is granted automatically to apps installed from the Play Store because _reasons_. That may be changing with Android O, and it's possible a new method for requesting that permission will come into play. In the meantime, you can use __hasOverlayPermission__ and __requestOverlayPermission__ should you need to.
+You probably don't need the _overlay_ permissions - they're used for very specific things, eg. a messenger app that's going to pop up a chat bubble over the top of whatever the user is currently doing - _even if not in your app_.
+
+The _overlay_ permission is special, different, and contentious! (Not least because the ability to draw over any other apps carries with it significant risk of abuse.) Right now it is granted automatically to apps installed from the Play Store because _reasons_. That may be changing with Android O, and it's possible a new method for requesting that permission will come into play. In the meantime, you can use __hasOverlayPermission__ and __requestOverlayPermission__ should you need to.
 
 I recommend checking and not assuming you have the overlay permission it (if you need it), as the rules are predicted to change.
 
 You will also need a line in the manifest file to request this permission, which is unusually named:
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
+___If you are not using the overlay permissions, then simply implement empty instances of the related abstract methods on your Activity.___
 
 ### How do I ensure my Service starts when the phone is powered on?
 
@@ -264,6 +319,7 @@ Your receiver will also need an entry in the manifest file, with an intent filte
 
 * See: https://stfalcon.com/en/blog/post/create-and-publish-your-Android-library for a comprehensive guide to publishing Android libraries to jCenter.
 * See also: https://medium.com/@daniellevass/how-to-publish-your-android-studio-library-to-jcenter-5384172c4739
+* Parceler library: https://github.com/johncarl81/parceler
 
 ## Licensing
 
