@@ -28,6 +28,7 @@ android {
         uploadName = 'ServiceLib'
         licences = [ 'Public domain' ]
         website = 'https://github.com/instantiator/background-service-lib'
+        userOrg = 'front-line-tech'
     }
 }
 
