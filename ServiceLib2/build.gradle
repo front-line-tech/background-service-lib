@@ -16,6 +16,9 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven {
+            url  "https://dl.bintray.com/front-line-tech/android-libs"
+        }
     }
 }
 
