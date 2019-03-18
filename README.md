@@ -3,6 +3,13 @@ Essential classes for reliable background Services.
 
 ## Change log
 
+### Version 2.0
+
+* Greater visibility of parameters inside bound and messenger services.
+* Support for notification channels, for newer versions of Android.
+* Republish to bintray under __front-line-tech__ organisation.
+* Rebuild for latest gradle, use bintray plugin for improved publishing.
+
 ### Versions 1.2 to 1.8
 
 * Define separate service classes: "Messenger Services" and "Bound Services".
@@ -54,11 +61,30 @@ Your Activities are also able to request permissions for your app, and helper me
 
 ## Installation
 
+### Currently
+
 To import this project using gradle, add the following to your dependencies:
 
-    compile 'com.github.instantiator:background-service-lib:1.+'
+    implementation 'com.flt.servicelib:background-service-lib:2.0'
 
-Also, ensure that there's an entry for `jcenter()` listed somewhere, eg. in the root `build.gradle` for your Project:
+Also, ensure that there's an entry for the maven repository in bintray listed in the root `build.gradle` for your Project:
+
+    allprojects {
+        repositories {
+            ...
+            maven {
+                url  "https://dl.bintray.com/front-line-tech/android-libs"
+            }
+        }
+    }
+
+### Soon...
+
+To import this project using gradle, add the following to your dependencies:
+
+    implementation 'com.flt.servicelib:background-service-lib:2.0'
+
+Also, ensure that there's an entry for `jcenter()` listed in the root `build.gradle` for your Project:
 
     allprojects {
         repositories {
