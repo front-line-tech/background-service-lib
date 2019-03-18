@@ -1,3 +1,5 @@
+[ ![Download](https://api.bintray.com/packages/front-line-tech/android-libs/background-service-lib/images/download.svg) ](https://bintray.com/front-line-tech/android-libs/background-service-lib/_latestVersion)
+
 # background-service-lib
 Essential classes for reliable background Services.
 
