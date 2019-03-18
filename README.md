@@ -330,24 +330,37 @@ This is where you need a __BroadcastReceiver__. Subclass the AbstractBootReceive
       }
     }
 
-Your receiver will also need an entry in the manifest file, with an intent filter to ensure it receives the BOOT_COMPLETED intent:
+Your receiver will also need an entry in the manifest file, with an intent filter to ensure it receives the `BOOT_COMPLETED` intents:
 
         <receiver
             android:name=".DemonstrationBootReceiver"
-            android:enabled="true"
-            android:exported="true">
-
+            android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
             </intent-filter>
-
         </receiver>
+
+Don't forget to ensure that you register for the `RECEIVE_BOOT_COMPLETED` permission inside the manifest, too:
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+#### Troubleshooting
+
+There are a number of things to consider if your app does not seem to receive these intents during boot up:
+
+* Have you registered for RECEIVE_BOOT_COMPLETED permission in your manifest?
+* Have you registered your receiver for the known boot completion intents?
+* Has your user got battery optimisations for your app in the phone's settings?
+* Have you exported your receiver? (Not recommended.)
+
+_In tests, some devices take several minutes before they'll decide that boot has actually completed and so broadcast the intent to your app._
 
 ### Credits
 
-* See: https://stfalcon.com/en/blog/post/create-and-publish-your-Android-library for a comprehensive guide to publishing Android libraries to jCenter.
-* See also: https://medium.com/@daniellevass/how-to-publish-your-android-studio-library-to-jcenter-5384172c4739
-* Parceler library: https://github.com/johncarl81/parceler
+* [6 easy steps to upload your Android library to Bintray/JCenter](https://medium.com/@anitaa_1990/6-easy-steps-to-upload-your-android-library-to-bintray-jcenter-59e6030c8890)
+* [Parceler library](https://github.com/johncarl81/parceler)
 
 ## Licensing
 
