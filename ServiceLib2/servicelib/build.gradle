@@ -1,15 +1,14 @@
-apply plugin: 'com.android.library'
+apply plugin: "com.android.library"
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 28
 
-
-
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 10
+        versionName "2.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -22,6 +21,25 @@ android {
         }
     }
 
+}
+
+/*
+ * https://medium.com/@anitaa_1990/6-easy-steps-to-upload-your-android-library-to-bintray-jcenter-59e6030c8890
+ */
+
+publish {
+    def groupProjectID = 'com.flt.servicelib'
+    def artifactProjectID = 'background-service-lib'
+    def publishVersionID = '2.0'
+
+    userOrg = 'front-line-tech'
+    repoName = 'android-libs'
+    groupId = groupProjectID
+    artifactId = artifactProjectID
+    publishVersion = publishVersionID
+    desc = 'Essential classes for persistent, long-running Services, binding to Services, and inter-process communication on Android.'
+    licences = [ 'Public domain' ]
+    website = 'https://github.com/front-line-tech/background-service-lib'
 }
 
 dependencies {
