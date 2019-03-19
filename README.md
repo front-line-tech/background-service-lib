@@ -245,7 +245,11 @@ We override the Application class as it is the perfect place to ensure that the 
       public void onCreate() {
         super.onCreate();
         Intent i = new Intent(this, DemonstrationService.class);
-        startService(i);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+          startForegroundService(i);
+        } else {
+          startService(i);
+        }
       }
     }
 
