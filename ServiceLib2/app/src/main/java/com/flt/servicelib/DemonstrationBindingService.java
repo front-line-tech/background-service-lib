@@ -9,6 +9,7 @@ import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 public class DemonstrationBindingService extends AbstractBackgroundBindingService<DemonstrationServiceInterface> implements DemonstrationServiceInterface {
@@ -57,7 +58,8 @@ public class DemonstrationBindingService extends AbstractBackgroundBindingServic
       ServiceAndMessengerActivity.class,
       getString(R.string.foreground_channel_name),
       getString(R.string.foreground_channel_description),
-      NotificationManagerCompat.IMPORTANCE_MAX
+      NotificationManagerCompat.IMPORTANCE_MAX,
+      NotificationCompat.PRIORITY_MAX
     );
 
     return config;

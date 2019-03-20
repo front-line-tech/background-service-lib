@@ -96,7 +96,7 @@ public abstract class AbstractBackgroundService extends Service {
       int importance = config.notification_channel_importance;
 
       //int importance = NotificationManager.IMPORTANCE_MAX;
-      NotificationChannel channel = new NotificationChannel(id, name,importance);
+      NotificationChannel channel = new NotificationChannel(id, name, importance);
       channel.setDescription(description);
       channel.enableLights(false);
       channel.enableVibration(false);
@@ -110,18 +110,23 @@ public abstract class AbstractBackgroundService extends Service {
   }
 
   protected Notification buildStandardNotification() {
-    Intent launchIntent = new Intent(this, config.notification_activity_class);
-    PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, launchIntent, 0);
     Notification.Builder builder = new Notification.Builder(this);
+
     builder.setContentTitle(config.notification_title);
     builder.setContentText(config.notification_content);
     builder.setSmallIcon(config.notification_icon);
     builder.setPriority(config.notification_priority);
 
-    builder.setContentIntent(pendingIntent);
+    if (config.notification_activity_class != null) {
+      Intent launchIntent = new Intent(this, config.notification_activity_class);
+      PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, launchIntent, 0);
+      builder.setContentIntent(pendingIntent);
+    }
+
     if (config.notification_ticker != null) {
       builder.setTicker(config.notification_ticker);
     }
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && foreground_channel != null) {
       builder.setChannelId(foreground_channel.getId());
     }

@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 10
-        versionName "2.0"
+        versionCode 11
+        versionName "2.1"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -30,7 +30,7 @@ android {
 publish {
     def groupProjectID = 'com.flt.servicelib'
     def artifactProjectID = 'background-service-lib'
-    def publishVersionID = '2.0'
+    def publishVersionID = '2.1'
 
     userOrg = 'front-line-tech'
     repoName = 'android-libs'

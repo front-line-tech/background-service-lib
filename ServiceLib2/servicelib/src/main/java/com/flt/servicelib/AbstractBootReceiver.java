@@ -3,6 +3,7 @@ package com.flt.servicelib;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
 /**
@@ -41,11 +42,24 @@ public abstract class AbstractBootReceiver<LaunchService> extends BroadcastRecei
         Intent.ACTION_LOCKED_BOOT_COMPLETED.equals(intent.getAction()) ||
         "android.intent.action.QUICKBOOT_POWERON".equals(intent.getAction())) {
       Log.i("BootReceiver", "Starting service: " + getServiceClass().getCanonicalName());
-      context.startService(new Intent(context, getServiceClass()));
+
+      Intent i = new Intent(context, getServiceClass());
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && shouldStartAsForegroundService()) {
+        context.startForegroundService(i);
+      } else {
+        context.startService(i);
+      }
+
     } else {
       Log.w("BootReceiver", "Intent action was not: " + Intent.ACTION_BOOT_COMPLETED);
     }
   }
+
+  /**
+   * Override and return true to use context.startForegroundService (Android O and above).
+   * If not running Android O+ then the receiver will fall back to regular context.startService.
+   */
+  protected abstract boolean shouldStartAsForegroundService();
 
   /**
    * Override and return the class of the service you wish to start - eg. MyService.class

@@ -17,6 +17,11 @@ public class DemonstrationBootReceiver extends AbstractBootReceiver<Demonstratio
   }
 
   @Override
+  protected boolean shouldStartAsForegroundService() {
+    return true;
+  }
+
+  @Override
   protected Class<DemonstrationBindingService> getServiceClass() {
     return DemonstrationBindingService.class;
   }
