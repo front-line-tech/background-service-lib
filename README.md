@@ -5,7 +5,7 @@ Essential classes for reliable background Services.
 
 ## Change log
 
-### Version 2.0
+### Version 2.0 to 2.1
 
 * Greater visibility of parameters inside bound and messenger services.
 * Support for notification channels, for newer versions of Android.
@@ -61,13 +61,19 @@ Servicelib provides an abstract class called __AbstractServiceBoundAppCompatActi
 
 Your Activities are also able to request permissions for your app, and helper methods can help you to determine if all the required permissions are granted before taking an action.
 
-## Installation
+## Installation through Gradle
 
-### Currently
+### Standard
 
-To import this project using gradle, add the following to your dependencies:
+This project is available through jCenter. To import this project using Gradle, add the following to the dependencies of your Gradle build file for the module:
 
-    implementation 'com.flt.servicelib:background-service-lib:2.0'
+    implementation 'com.flt.servicelib:background-service-lib:2.1'
+
+### Fallback
+
+To import this project using Gradle, add the following to your dependencies:
+
+    implementation 'com.flt.servicelib:background-service-lib:2.1'
 
 Also, ensure that there's an entry for the maven repository in bintray listed in the root `build.gradle` for your Project:
 
@@ -77,20 +83,6 @@ Also, ensure that there's an entry for the maven repository in bintray listed in
             maven {
                 url  "https://dl.bintray.com/front-line-tech/android-libs"
             }
-        }
-    }
-
-### Soon...
-
-To import this project using gradle, add the following to your dependencies:
-
-    implementation 'com.flt.servicelib:background-service-lib:2.0'
-
-Also, ensure that there's an entry for `jcenter()` listed in the root `build.gradle` for your Project:
-
-    allprojects {
-        repositories {
-            jcenter()
         }
     }
 
