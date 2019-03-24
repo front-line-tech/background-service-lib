@@ -335,6 +335,7 @@ Your receiver will also need an entry in the manifest file, with an intent filte
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </receiver>
 
